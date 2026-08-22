@@ -19,12 +19,14 @@
 @media(max-width:640px){.container{width:min(100% - 28px,1180px)}.nav-wrap{height:76px}.brand-mark{width:36px;height:36px}.brand-copy strong{font-size:18px}.brand-copy small{font-size:7px}.hero-inner{padding-top:118px;padding-bottom:55px;gap:42px}.hero h1{font-size:53px}.hero-lead{font-size:18px}.hero-stats{grid-template-columns:1fr;gap:8px;margin-top:35px}.blueprint-card{padding:14px;border-radius:20px;transform:none}.trust-strip{overflow-x:auto;justify-content:flex-start;white-space:nowrap}.section{padding:78px 0}.two-col{gap:18px}.service-grid,.cap-grid{grid-template-columns:1fr}.service-card{min-height:210px}.service-card h3{margin-top:35px}.federal-panel{padding:26px}.federal-panel strong{font-size:34px}.footer-grid{grid-template-columns:1fr;padding:28px 0}.back-top{justify-self:start}}
 .main-logo {
   width: 300px;
+  height: auto;
   max-height: 72px;
   object-fit: contain;
 }
 
 .footer-logo {
   width: 320px;
+  height: auto;
   max-width: 100%;
   object-fit: contain;
 }
