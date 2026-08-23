@@ -1402,5 +1402,204 @@ img {
     padding: 26px;
   }
 }
-styles-4.css
-Displaying blue-sonic-favicon.png.
+
+
+/* =========================================================
+   BLUE SONIC POLISH v32
+   Final presentation fixes: no numbering, stronger icons,
+   highlighted market cards, and clean company-data layout.
+   ========================================================= */
+
+/* WHY BLUE SONIC — icon-led cards, no 01/02/03/04 */
+.value-card {
+  min-height: 255px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 28px;
+  border: 1px solid rgba(91, 184, 255, 0.20);
+  background: linear-gradient(155deg, rgba(20, 52, 88, 0.78), rgba(8, 22, 38, 0.94));
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.16);
+}
+
+.value-icon {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 28px;
+  border-radius: 15px;
+  color: #72c4ff;
+  border: 1px solid rgba(91, 184, 255, 0.32);
+  background: linear-gradient(145deg, rgba(39,140,255,0.24), rgba(39,140,255,0.06));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.value-icon svg,
+.service-icon svg {
+  width: 27px;
+  height: 27px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.value-mark { display: none !important; }
+
+/* SERVICES — uniform professional line icons */
+.service-icon {
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  color: #80cbff;
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(39,140,255,0.26), rgba(39,140,255,0.07));
+  border: 1px solid rgba(91,184,255,0.38);
+  box-shadow: 0 12px 30px rgba(0, 64, 148, 0.18), inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.service-icon svg { width: 29px; height: 29px; }
+
+/* MARKETS — clearly highlighted categories */
+.markets {
+  background: linear-gradient(180deg, #f8fbff 0%, #eef5fc 100%);
+  color: #0b1b2d;
+}
+
+.market-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.market-card {
+  position: relative;
+  min-height: 220px;
+  padding: 32px;
+  overflow: hidden;
+  border: 1px solid #cfdfef;
+  border-radius: 22px;
+  background: #ffffff;
+  box-shadow: 0 18px 46px rgba(20, 70, 120, 0.08);
+}
+
+.market-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 5px;
+  background: linear-gradient(180deg, #58b8ff, #176ee7);
+}
+
+.market-card h3 {
+  margin: 0 0 16px;
+  color: #123c67;
+  font-family: "Oswald", sans-serif;
+  font-size: clamp(24px, 2.4vw, 31px);
+  line-height: 1.05;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+.market-card p {
+  margin: 0;
+  color: #586d82;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+/* COMPANY DATA — clean label/value alignment */
+.company-data {
+  background: linear-gradient(180deg, #edf4fb 0%, #f7faff 100%);
+  color: #0c1622;
+}
+
+.company-data-card {
+  border: 1px solid #cdddeb;
+  box-shadow: 0 22px 58px rgba(24, 67, 110, 0.10);
+}
+
+.data-row {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: 30px;
+  align-items: start;
+  padding: 21px 26px;
+}
+
+.data-row span {
+  padding-top: 2px;
+  color: #246fb8;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.data-row strong {
+  display: block;
+  color: #152a3d;
+  font-size: 14px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.data-code {
+  font-family: "Inter", monospace;
+  letter-spacing: 0.10em;
+  color: #0f63b7 !important;
+}
+
+/* CAPABILITIES — remove decorative numbers and strengthen cards */
+.cap-item span { display: none !important; }
+
+.cap-item {
+  position: relative;
+  min-height: 105px;
+  display: flex;
+  align-items: center;
+  padding: 24px 24px 24px 52px;
+  border: 1px solid rgba(255,255,255,0.11);
+  border-radius: 17px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.045), rgba(255,255,255,0.014));
+}
+
+.cap-item::before {
+  content: "";
+  position: absolute;
+  left: 24px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #4eaeff;
+  box-shadow: 0 0 0 6px rgba(78,174,255,0.10);
+}
+
+.cap-item strong {
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+/* Keep buttons obviously actionable */
+.trade-partners-panel .btn,
+.contact-card .btn {
+  box-shadow: 0 10px 30px rgba(39,140,255,0.24);
+}
+
+@media (max-width: 980px) {
+  .market-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 720px) {
+  .market-grid { grid-template-columns: 1fr; }
+  .data-row { grid-template-columns: 1fr; gap: 7px; }
+  .value-card { min-height: 0; }
+}
+styles-5.css
+Displaying index-6.html.
