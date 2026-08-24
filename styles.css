@@ -1,3 +1,4 @@
+None selected
 :root {
   --bg: #07111f;
   --bg-2: #0b1727;
@@ -1864,5 +1865,180 @@ img {
     padding: 26px 25px 26px 30px;
   }
 }
-styles-7.css
-Displaying styles-7.css.
+
+
+/* =========================================================
+   BLUE SONIC IMAGE INTEGRATION v37
+   Adds real construction photography without changing
+   the existing hero or core visual system.
+   ========================================================= */
+
+.delivery-feature {
+  position: relative;
+  min-height: 360px;
+  margin: 0 0 28px;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgba(91, 184, 255, 0.18);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
+  background: #071421;
+}
+
+.delivery-feature img {
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.delivery-feature::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(3, 14, 26, 0.82) 0%, rgba(3, 14, 26, 0.40) 45%, rgba(3, 14, 26, 0.08) 75%),
+    linear-gradient(180deg, rgba(3, 14, 26, 0.02) 45%, rgba(3, 14, 26, 0.52) 100%);
+  pointer-events: none;
+}
+
+.delivery-feature-overlay {
+  position: absolute;
+  z-index: 2;
+  left: 34px;
+  bottom: 32px;
+  max-width: 560px;
+}
+
+.delivery-feature-overlay span {
+  display: block;
+  margin-bottom: 9px;
+  color: #68baff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.delivery-feature-overlay strong {
+  display: block;
+  color: #fff;
+  font-family: "Oswald", sans-serif;
+  font-size: clamp(24px, 3vw, 40px);
+  line-height: 1.08;
+  text-transform: uppercase;
+}
+
+
+/* Representative project photography */
+.representative-card {
+  padding: 0;
+}
+
+.representative-card::before {
+  z-index: 3;
+}
+
+.representative-image {
+  width: 100%;
+  height: 225px;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  border-bottom: 1px solid #d3e0ec;
+}
+
+.representative-card-body {
+  padding: 27px 30px 30px 34px;
+}
+
+.site-cleanup-feature {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, 0.75fr);
+  min-height: 290px;
+  margin-top: 22px;
+  overflow: hidden;
+  border: 1px solid #d3e0ec;
+  border-radius: 21px;
+  background: #0a1a2c;
+  box-shadow: 0 17px 42px rgba(24, 67, 110, 0.08);
+}
+
+.site-cleanup-feature img {
+  width: 100%;
+  height: 100%;
+  min-height: 290px;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.site-cleanup-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 34px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(39, 140, 255, 0.16), transparent 45%),
+    linear-gradient(155deg, #102a46 0%, #081522 100%);
+}
+
+.site-cleanup-copy span {
+  margin-bottom: 11px;
+  color: #68baff;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.site-cleanup-copy strong {
+  color: #fff;
+  font-family: "Oswald", sans-serif;
+  font-size: 29px;
+  line-height: 1.12;
+  text-transform: uppercase;
+}
+
+@media (max-width: 760px) {
+  .delivery-feature,
+  .delivery-feature img {
+    min-height: 310px;
+  }
+
+  .delivery-feature img {
+    object-position: 62% center;
+  }
+
+  .delivery-feature-overlay {
+    left: 24px;
+    right: 24px;
+    bottom: 24px;
+  }
+
+  .representative-image {
+    height: 210px;
+  }
+
+  .representative-card-body {
+    padding: 24px 24px 27px 29px;
+  }
+
+  .site-cleanup-feature {
+    grid-template-columns: 1fr;
+  }
+
+  .site-cleanup-feature img {
+    min-height: 235px;
+  }
+
+  .site-cleanup-copy {
+    padding: 28px 25px;
+  }
+
+  .site-cleanup-copy strong {
+    font-size: 25px;
+  }
+}
