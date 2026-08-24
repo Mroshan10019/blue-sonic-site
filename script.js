@@ -1,5 +1,4 @@
 
-
 (() => {
   "use strict";
 
@@ -7,17 +6,13 @@
   const navToggle = document.querySelector(".nav-toggle");
   const nav = document.querySelector(".nav");
   const year = document.getElementById("year");
-  const intro = document.getElementById("sonicIntro");
-  const soundButton = document.getElementById("sonicSoundButton");
 
-  /* Existing site behavior */
   if (year) year.textContent = new Date().getFullYear();
 
   const updateHeader = () => {
     if (!header) return;
     header.classList.toggle("scrolled", window.scrollY > 18);
   };
-
   updateHeader();
   window.addEventListener("scroll", updateHeader, { passive: true });
 
@@ -36,260 +31,238 @@
   }
 
   const reveals = document.querySelectorAll(".reveal");
-
   if ("IntersectionObserver" in window) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("in");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
 
     reveals.forEach((el) => observer.observe(el));
   } else {
     reveals.forEach((el) => el.classList.add("in"));
   }
 
-  /*
-   * BLUE SONIC INTRO SOUND
-   *
-   * Creates a short thunder sound with the Web Audio API.
-   * Then uses the browser's speech voice to say "Blue Sonic".
-   *
-   * IMPORTANT:
-   * Most phones and browsers block automatic sound until
-   * the visitor interacts with the page. If that happens,
-   * the "Tap for thunder" button appears.
-   */
+  /* ======================================================
+     BLUE SONIC PREMIUM MASCOT INTRO
+     ====================================================== */
+
+  const intro = document.getElementById("sonicPremiumIntro");
+  const frameEl = document.getElementById("sonicPremiumFrame");
+  const soundButton = document.getElementById("premiumSoundButton");
+
+  if (!intro || !frameEl) return;
+
+  const frames = Array.from({ length: 10 }, (_, i) =>
+    `sonic-frame-${String(i + 1).padStart(2, "0")}.png?v=41`
+  );
+
+  /* Preload all frames before playback. */
+  frames.forEach((src) => {
+    const img = new Image();
+    img.src = src;
+  });
+
+  /* Frame timing in milliseconds.
+     Faster through arm-folding frames, slower on shield/logo lock.
+  */
+  const timeline = [
+    { frame: 1, hold: 180, flash: true,  impact: true  },
+    { frame: 2, hold: 260, flash: false, impact: false },
+    { frame: 3, hold: 250, flash: false, impact: false },
+    { frame: 4, hold: 210, flash: false, impact: false },
+    { frame: 5, hold: 220, flash: false, impact: false },
+    { frame: 6, hold: 220, flash: false, impact: false },
+    { frame: 7, hold: 220, flash: false, impact: false },
+    { frame: 8, hold: 270, flash: false, impact: true  },
+    { frame: 9, hold: 420, flash: true,  impact: true  },
+    { frame:10, hold: 900, flash: true,  impact: true  }
+  ];
 
   let audioContext = null;
   let soundPlayed = false;
+  let sequenceStarted = false;
+  let timer = null;
 
   const getAudioContext = () => {
     const AudioCtx = window.AudioContext || window.webkitAudioContext;
-
     if (!AudioCtx) return null;
-
-    if (!audioContext) {
-      audioContext = new AudioCtx();
-    }
-
+    if (!audioContext) audioContext = new AudioCtx();
     return audioContext;
   };
 
-  const createNoiseBuffer = (ctx, seconds = 1.65) => {
+  const createNoiseBuffer = (ctx, seconds = 1.8) => {
     const buffer = ctx.createBuffer(
       1,
       Math.floor(ctx.sampleRate * seconds),
       ctx.sampleRate
     );
-
     const data = buffer.getChannelData(0);
 
     for (let i = 0; i < data.length; i++) {
-      const decay = Math.pow(1 - i / data.length, 2.5);
+      const decay = Math.pow(1 - i / data.length, 2.4);
       data[i] = (Math.random() * 2 - 1) * decay;
     }
-
     return buffer;
   };
 
-  const thunder = async () => {
+  const playThunder = async () => {
     const ctx = getAudioContext();
-
     if (!ctx) return false;
 
     try {
-      if (ctx.state === "suspended") {
-        await ctx.resume();
-      }
-
-      if (ctx.state !== "running") {
-        return false;
-      }
+      if (ctx.state === "suspended") await ctx.resume();
+      if (ctx.state !== "running") return false;
 
       const now = ctx.currentTime;
 
-      /*
-       * LOW THUNDER BODY
-       */
       const noise = ctx.createBufferSource();
-      noise.buffer = createNoiseBuffer(ctx, 1.75);
+      noise.buffer = createNoiseBuffer(ctx, 1.8);
 
       const lowpass = ctx.createBiquadFilter();
       lowpass.type = "lowpass";
-      lowpass.frequency.setValueAtTime(210, now);
-      lowpass.frequency.exponentialRampToValueAtTime(72, now + 1.55);
+      lowpass.frequency.setValueAtTime(230, now);
+      lowpass.frequency.exponentialRampToValueAtTime(65, now + 1.65);
 
       const noiseGain = ctx.createGain();
       noiseGain.gain.setValueAtTime(0.0001, now);
-      noiseGain.gain.exponentialRampToValueAtTime(0.72, now + 0.018);
-      noiseGain.gain.exponentialRampToValueAtTime(0.18, now + 0.43);
-      noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.72);
+      noiseGain.gain.exponentialRampToValueAtTime(0.74, now + 0.014);
+      noiseGain.gain.exponentialRampToValueAtTime(0.18, now + 0.52);
+      noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 1.78);
 
-      noise
-        .connect(lowpass)
-        .connect(noiseGain)
-        .connect(ctx.destination);
-
+      noise.connect(lowpass).connect(noiseGain).connect(ctx.destination);
       noise.start(now);
 
-      /*
-       * LIGHTNING CRACK
-       */
       const crack = ctx.createBufferSource();
-      crack.buffer = createNoiseBuffer(ctx, 0.19);
+      crack.buffer = createNoiseBuffer(ctx, 0.17);
 
-      const crackFilter = ctx.createBiquadFilter();
-      crackFilter.type = "highpass";
-      crackFilter.frequency.value = 1050;
+      const highpass = ctx.createBiquadFilter();
+      highpass.type = "highpass";
+      highpass.frequency.value = 950;
 
       const crackGain = ctx.createGain();
       crackGain.gain.setValueAtTime(0.0001, now);
-      crackGain.gain.exponentialRampToValueAtTime(0.28, now + 0.006);
-      crackGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+      crackGain.gain.exponentialRampToValueAtTime(0.34, now + 0.004);
+      crackGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.15);
 
-      crack
-        .connect(crackFilter)
-        .connect(crackGain)
-        .connect(ctx.destination);
+      crack.connect(highpass).connect(crackGain).connect(ctx.destination);
+      crack.start(now);
 
-      crack.start(now + 0.01);
-
-      /*
-       * LOW BASS IMPACT
-       */
       const sub = ctx.createOscillator();
       const subGain = ctx.createGain();
-
       sub.type = "sine";
-      sub.frequency.setValueAtTime(62, now);
-      sub.frequency.exponentialRampToValueAtTime(31, now + 0.72);
+      sub.frequency.setValueAtTime(64, now);
+      sub.frequency.exponentialRampToValueAtTime(29, now + 0.82);
 
       subGain.gain.setValueAtTime(0.0001, now);
-      subGain.gain.exponentialRampToValueAtTime(0.40, now + 0.02);
-      subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.88);
+      subGain.gain.exponentialRampToValueAtTime(0.42, now + 0.02);
+      subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.95);
 
-      sub
-        .connect(subGain)
-        .connect(ctx.destination);
-
+      sub.connect(subGain).connect(ctx.destination);
       sub.start(now);
-      sub.stop(now + 0.92);
+      sub.stop(now + 1.0);
 
       return true;
-    } catch (error) {
+    } catch (_) {
       return false;
     }
   };
 
   const sayBlueSonic = () => {
-    if (!("speechSynthesis" in window)) {
-      return;
-    }
+    if (!("speechSynthesis" in window)) return;
 
     window.speechSynthesis.cancel();
 
-    const utterance = new SpeechSynthesisUtterance("Blue Sonic");
-
-    utterance.rate = 0.83;
-    utterance.pitch = 0.72;
-    utterance.volume = 0.92;
+    const line = new SpeechSynthesisUtterance("Blue Sonic");
+    line.rate = 0.80;
+    line.pitch = 0.70;
+    line.volume = 0.95;
 
     const voices = window.speechSynthesis.getVoices();
-
-    const preferredVoice =
-      voices.find(
-        (voice) =>
-          /en-US/i.test(voice.lang) &&
-          /male|david|mark|guy/i.test(voice.name)
-      ) ||
-      voices.find((voice) => /en-US/i.test(voice.lang)) ||
+    const voice =
+      voices.find(v => /en-US/i.test(v.lang) && /male|david|mark|guy/i.test(v.name)) ||
+      voices.find(v => /en-US/i.test(v.lang)) ||
       voices[0];
 
-    if (preferredVoice) {
-      utterance.voice = preferredVoice;
-    }
+    if (voice) line.voice = voice;
 
-    window.setTimeout(() => {
-      try {
-        window.speechSynthesis.speak(utterance);
-      } catch (error) {}
-    }, 760);
+    try {
+      window.speechSynthesis.speak(line);
+    } catch (_) {}
   };
 
   const playBrandSound = async () => {
-    if (soundPlayed) {
-      return true;
-    }
-
-    const success = await thunder();
-
-    if (!success) {
-      return false;
-    }
+    if (soundPlayed) return true;
+    const ok = await playThunder();
+    if (!ok) return false;
 
     soundPlayed = true;
+    intro.classList.remove("needs-audio");
 
-    sayBlueSonic();
-
-    if (intro) {
-      intro.classList.remove("needs-audio");
-    }
-
+    /* Voice lands with the final logo lock-up. */
+    window.setTimeout(sayBlueSonic, 2700);
     return true;
   };
 
-  const finishIntro = () => {
-    if (!intro) return;
+  const pulse = (item) => {
+    intro.classList.remove("frame-impact", "flash-now");
+    void intro.offsetWidth;
 
-    intro.classList.add("is-finished");
+    if (item.impact) intro.classList.add("frame-impact");
+    if (item.flash) intro.classList.add("flash-now");
 
     window.setTimeout(() => {
-      intro.setAttribute("aria-hidden", "true");
-    }, 600);
+      intro.classList.remove("frame-impact");
+    }, 135);
   };
 
-  if (intro) {
-    /*
-     * Try to play the sound automatically.
-     * Some browsers will block this.
-     */
-    window.setTimeout(async () => {
-      const success = await playBrandSound();
-
-      if (!success) {
-        intro.classList.add("needs-audio");
-      }
-    }, 250);
-
-    /*
-     * Finish visual intro after 3 seconds,
-     * even if the browser blocked sound.
-     */
+  const finishIntro = () => {
+    intro.classList.add("is-finished");
     window.setTimeout(() => {
-      finishIntro();
-    }, 3000);
+      intro.setAttribute("aria-hidden", "true");
+    }, 650);
+  };
 
-    /*
-     * If sound was blocked, visitor can tap this button.
-     */
-    if (soundButton) {
-      soundButton.addEventListener("click", async (event) => {
-        event.preventDefault();
-        event.stopPropagation();
+  const runSequence = () => {
+    if (sequenceStarted) return;
+    sequenceStarted = true;
 
-        await playBrandSound();
+    let index = 0;
 
-        window.setTimeout(() => {
-          finishIntro();
-        }, 1850);
-      });
-    }
+    const step = () => {
+      const item = timeline[index];
+      frameEl.src = frames[item.frame - 1];
+      pulse(item);
+
+      index += 1;
+
+      if (index < timeline.length) {
+        timer = window.setTimeout(step, item.hold);
+      } else {
+        timer = window.setTimeout(finishIntro, item.hold);
+      }
+    };
+
+    step();
+  };
+
+  /* Visual animation always starts. */
+  runSequence();
+
+  /* Try audio automatically; show tap fallback if browser blocks it. */
+  window.setTimeout(async () => {
+    const ok = await playBrandSound();
+    if (!ok) intro.classList.add("needs-audio");
+  }, 120);
+
+  if (soundButton) {
+    soundButton.addEventListener("click", async (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      await playBrandSound();
+    });
   }
 })();
