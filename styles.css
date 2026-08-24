@@ -2233,3 +2233,205 @@ body {
     line-height: 1.72;
   }
 }
+
+
+/* =========================================================
+   BLUE SONIC SIMPLE THUNDER INTRO v44
+   Lightning strike -> logo pops in -> electric sweep -> site.
+   ========================================================= */
+
+.sonic-thunder-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 46%, rgba(35, 128, 255, .18), transparent 30%),
+    #020812;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .55s ease, visibility .55s ease;
+}
+
+.sonic-thunder-intro.is-finished {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.sonic-thunder-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: #e8f7ff;
+  opacity: 0;
+  pointer-events: none;
+  animation: sonicThunderFlash .72s ease .16s both;
+}
+
+.sonic-thunder-bolt {
+  position: absolute;
+  z-index: 3;
+  top: -12%;
+  left: 50%;
+  width: 8px;
+  height: 62vh;
+  min-height: 360px;
+  max-height: 640px;
+  opacity: 0;
+  transform: translateX(-50%) rotate(2deg);
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #b8ecff 36%,
+    #5bbdff 68%,
+    #1681ff 100%
+  );
+  filter:
+    drop-shadow(0 0 8px rgba(188, 239, 255, 1))
+    drop-shadow(0 0 22px rgba(45, 143, 255, .95));
+  clip-path: polygon(
+    48% 0, 72% 0, 58% 37%, 100% 37%,
+    36% 100%, 49% 56%, 10% 56%
+  );
+  animation: sonicThunderBolt .46s ease .12s both;
+}
+
+.sonic-thunder-logo-wrap {
+  position: relative;
+  z-index: 4;
+  width: min(1040px, 94vw);
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transform: scale(.72);
+  animation: sonicLogoPop .78s cubic-bezier(.16,.9,.25,1.16) .46s forwards;
+}
+
+.sonic-thunder-logo {
+  display: block;
+  width: 100%;
+  max-height: 62vh;
+  object-fit: contain;
+  object-position: center;
+  filter:
+    drop-shadow(0 0 10px rgba(62, 166, 255, .35))
+    drop-shadow(0 0 28px rgba(25, 110, 255, .24));
+}
+
+.sonic-electric-sweep {
+  position: absolute;
+  inset: 13% 0;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-150%);
+  mix-blend-mode: screen;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 39%,
+    rgba(255,255,255,.96) 48%,
+    rgba(96,200,255,.86) 52%,
+    transparent 61%,
+    transparent 100%
+  );
+  animation: sonicElectricSweep .62s ease 1.05s forwards;
+}
+
+.sonic-thunder-audio {
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  transform: translate(-50%, 10px);
+  min-height: 42px;
+  padding: 0 17px;
+  border: 1px solid rgba(118, 204, 255, .42);
+  border-radius: 999px;
+  background: rgba(4, 24, 48, .82);
+  color: #f0f9ff;
+  font: 800 10px/1 "Inter", system-ui, sans-serif;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  opacity: 0;
+  pointer-events: none;
+  box-shadow: 0 12px 30px rgba(0,0,0,.3);
+  backdrop-filter: blur(9px);
+  transition: opacity .2s ease, transform .2s ease;
+}
+
+.sonic-thunder-intro.needs-audio .sonic-thunder-audio {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+}
+
+@keyframes sonicThunderFlash {
+  0%, 100% { opacity: 0; }
+  16% { opacity: .96; }
+  31% { opacity: .10; }
+  44% { opacity: .58; }
+  62% { opacity: 0; }
+}
+
+@keyframes sonicThunderBolt {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-18%) scaleY(.18);
+  }
+  28% { opacity: 1; }
+  72% { opacity: .96; }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(5%) scaleY(1);
+  }
+}
+
+@keyframes sonicLogoPop {
+  0% {
+    opacity: 0;
+    transform: scale(.72);
+    filter: brightness(1.8);
+  }
+  68% {
+    opacity: 1;
+    transform: scale(1.035);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes sonicElectricSweep {
+  0% {
+    opacity: 0;
+    transform: translateX(-150%);
+  }
+  14% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: translateX(150%);
+  }
+}
+
+@media (max-width: 700px) {
+  .sonic-thunder-logo-wrap {
+    width: 96vw;
+  }
+
+  .sonic-thunder-logo {
+    max-height: 46vh;
+  }
+
+  .sonic-thunder-bolt {
+    height: 54vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sonic-thunder-intro {
+    display: none !important;
+  }
+}
