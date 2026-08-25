@@ -10,12 +10,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=45">
-  <link rel="stylesheet" href="polish.css?v=45">
+  <link rel="stylesheet" href="polish.css?v=46">
 </head>
 <body>
 <header class="site-header" id="top">
   <div class="container nav-wrap">
-    <a class="brand" href="#top" aria-label="Blue Sonic home"><img src="blue-sonic-logo-new.png?v=45" alt="Blue Sonic Construction & Site Services" class="main-logo"></a>
+    <a class="brand" href="#top" aria-label="Blue Sonic home"><img src="blue-sonic-logo-new.png?v=46" alt="Blue Sonic Construction & Site Services" class="main-logo"></a>
     <button class="nav-toggle" aria-label="Open navigation menu" aria-expanded="false"><span></span><span></span><span></span></button>
     <nav class="nav" aria-label="Primary navigation">
       <a href="#services">Services</a><a href="#why">Why Blue Sonic</a><a href="#markets">Markets</a><a href="#federal">Federal</a><a href="#projects">Pursuits</a><a href="#capabilities">Capabilities</a><a href="#founder">Founder</a><a href="#contact" class="btn btn-small btn-outline">Contact</a>
@@ -23,17 +23,20 @@
   </div>
 </header>
 <main>
-<section class="hero polished-hero">
-  <div class="hero-grid"></div><div class="hero-glow hero-glow-one"></div><div class="hero-glow hero-glow-two"></div>
-  <div class="container hero-visual-pair reveal">
-    <figure class="hero-visual hero-visual-primary"><img src="demolition-feature-blue.png?v=45" onerror="this.onerror=null;this.src='hero-demolition.png?v=45';" alt="Heavy equipment performing commercial demolition"></figure>
-    <figure class="hero-visual hero-visual-secondary"><img src="hero-demolition.png?v=45" alt="Commercial construction and demolition site"></figure>
-  </div>
-  <div class="container polished-hero-copy reveal delay-1">
+<section class="hero polished-hero hero-background-main">
+  <div class="hero-background-overlay"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-glow hero-glow-one"></div>
+  <div class="hero-glow hero-glow-two"></div>
+
+  <div class="container polished-hero-copy reveal">
     <div class="eyebrow">Commercial • Government • Institutional</div>
     <h1>Built for the job.<br><span>Ready to deliver.</span></h1>
     <p class="hero-lead">Blue Sonic provides construction and site services with responsive coordination, qualified trade support, and a practical approach to execution.</p>
-    <div class="hero-actions"><a href="#services" class="btn btn-primary">View Services</a><a href="#contact" class="btn btn-ghost">Contact Blue Sonic</a></div>
+    <div class="hero-actions">
+      <a href="#services" class="btn btn-primary">View Services</a>
+      <a href="#contact" class="btn btn-ghost">Contact Blue Sonic</a>
+    </div>
   </div>
 </section>
 <section class="section services" id="services">
@@ -86,15 +89,33 @@
     <div class="project-disclaimer">Current pursuits are business-development opportunities and are not presented as completed or awarded projects.</div>
   </div>
 </section>
-<section class="section capabilities" id="capabilities">
-  <div class="container"><div class="capability-banner compact-capability-banner"><div><div class="section-kicker">Capabilities</div><h2>Need the details?</h2><p>Download the Blue Sonic capability statement for company information and contracting details.</p></div><div class="capability-actions"><a href="blue-sonic-capabilities-statement.pdf" class="btn btn-primary capability-download" download>Download Capability Statement</a><a href="#contact" class="btn btn-ghost dark-ghost">Contact Blue Sonic</a></div></div></div>
-</section>
+<section class="section capabilities capabilities-background" id="capabilities">
+    <div class="capabilities-background-overlay"></div>
+    <div class="container capability-background-content">
+      <div class="capability-banner compact-capability-banner">
+        <div>
+          <div class="section-kicker">Capabilities</div>
+          <h2>Need the details?</h2>
+          <p>Download the Blue Sonic capability statement for company information and contracting details.</p>
+        </div>
+
+        <div class="capability-actions">
+          <a href="blue-sonic-capabilities-statement.pdf"
+             class="btn btn-primary capability-download"
+             download>
+            Download Capability Statement
+          </a>
+          <a href="#contact" class="btn btn-ghost capability-ghost">Contact Blue Sonic</a>
+        </div>
+      </div>
+    </div>
+  </section>
 <section class="section partner-section" id="partners">
   <div class="container partner-panel"><div><div class="section-kicker">Trade Partners</div><h2>Strong projects require strong partners.</h2><p>Blue Sonic welcomes relationships with qualified contractors and specialty trades interested in commercial and government opportunities.</p></div><a href="mailto:projects@bluesonicremoval.com?subject=Blue%20Sonic%20Trade%20Partner%20Inquiry" class="btn btn-primary">Become a Trade Partner</a></div>
 </section>
 <section class="section about founder-section" id="founder">
   <div class="container about-owner-grid">
-    <div class="about-photo-wrap"><div class="about-photo-frame"><img src="mohamed-roshan-headshot.jpg?v=45" alt="Mohamed Roshan, Founder of Blue Sonic" class="about-owner-photo"></div><div class="about-photo-caption"><strong>Mohamed Roshan</strong><span>Founder • Blue Sonic</span></div></div>
+    <div class="about-photo-wrap"><div class="about-photo-frame"><img src="mohamed-roshan-headshot.jpg?v=46" alt="Mohamed Roshan, Founder of Blue Sonic" class="about-owner-photo"></div><div class="about-photo-caption"><strong>Mohamed Roshan</strong><span>Founder • Blue Sonic</span></div></div>
     <div class="about-owner-copy"><div class="section-kicker">From the Founder</div><h2>Building Blue Sonic with purpose.</h2><p class="about-lead">Blue Sonic is being built around a simple idea: take every opportunity seriously, treat people with respect, and keep moving the work forward.</p><p>Mohamed Roshan remains directly involved in business development, client relationships, and project strategy as the company grows.</p><p class="founder-note">Founder message can be refined later without changing the rest of the website.</p></div>
   </div>
 </section>
@@ -102,7 +123,7 @@
   <div class="container contact-grid"><div><div class="section-kicker">Contact</div><h2>Bring Blue Sonic into your next project.</h2><p>Tell us the scope, location, and timeline. We will take it from there.</p></div><div class="contact-card"><a href="tel:+15168886784"><span>Phone</span><strong>(516) 888-6784</strong></a><a href="mailto:projects@bluesonicremoval.com"><span>Email</span><strong>projects@bluesonicremoval.com</strong></a><div><span>Website</span><strong>BlueSonicRemoval.com</strong></div><a class="btn btn-primary full" href="mailto:projects@bluesonicremoval.com?subject=Project%20Inquiry%20for%20Blue%20Sonic">Start a Project Conversation</a></div></div>
 </section>
 </main>
-<footer class="site-footer"><div class="container footer-grid"><div class="footer-brand"><img src="blue-sonic-logo-new.png?v=45" alt="Blue Sonic Construction & Site Services" class="footer-logo"></div><div class="footer-copy">© <span id="year"></span> Blue Sonic. Legal entity: NYC ATM LLC.</div><a href="#top" class="back-top">Back to top ↑</a></div></footer>
-<script src="script.js?v=45"></script>
+<footer class="site-footer"><div class="container footer-grid"><div class="footer-brand"><img src="blue-sonic-logo-new.png?v=46" alt="Blue Sonic Construction & Site Services" class="footer-logo"></div><div class="footer-copy">© <span id="year"></span> Blue Sonic. Legal entity: NYC ATM LLC.</div><a href="#top" class="back-top">Back to top ↑</a></div></footer>
+<script src="script.js?v=46"></script>
 </body>
 </html>
