@@ -824,3 +824,62 @@ html.bs-intro-active body{
     max-width:none !important;
   }
 }
+
+
+/* =========================================================
+   V63 — TRUE MOBILE HEADER POSITIONING
+   Logo and phone are positioned independently so the spacing
+   is visibly wider, not dependent on grid/flex distribution.
+   ========================================================= */
+@media(max-width:560px){
+  .container.moving-topbar{
+    position:relative !important;
+    display:block !important;
+    width:92vw !important;
+    max-width:none !important;
+    min-height:92px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    padding:10px 0 !important;
+  }
+
+  .moving-brand-block{
+    position:absolute !important;
+    left:-14px !important;
+    top:50% !important;
+    transform:translateY(-50%) !important;
+    margin:0 !important;
+    width:auto !important;
+  }
+
+  .moving-brand{
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  .moving-brand-logo{
+    width:270px !important;
+    max-width:none !important;
+    max-height:70px !important;
+    margin:0 !important;
+    transform:none !important;
+  }
+
+  .moving-call-image-link{
+    position:absolute !important;
+    right:-10px !important;
+    top:50% !important;
+    transform:translateY(-50%) !important;
+    margin:0 !important;
+  }
+
+  .moving-call-image-link:hover{
+    transform:translateY(-50%) translateY(-1px) !important;
+  }
+
+  .moving-call-image{
+    width:116px !important;
+    max-width:none !important;
+    margin:0 !important;
+  }
+}
