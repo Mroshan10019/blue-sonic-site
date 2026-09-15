@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Blue Sonic Moving Services | NY & NJ Moving Coordination</title>
+  <title>Blue Sonic Moving | Moving a Brighter Tomorrow | NY & NJ</title>
   <meta name="description" content="Request moving help with Blue Sonic for Queens, Brooklyn, Staten Island, Long Island, nearby New Jersey and select New York areas. Call 1-844-MR-SONIC or request a quote online.">
   <link rel="canonical" href="https://BlueSonicRemoval.com/moving/">
-  <link rel="stylesheet" href="../assets/moving.css">
+  <link rel="stylesheet" href="../assets/moving.css?v=61">
   <!-- Replace G-XXXXXXXXXX with your Google Analytics 4 Measurement ID -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
   <script>
@@ -30,17 +30,24 @@
   </script>
 </head>
 <body>
+<div id="blue-sonic-intro" class="bs-intro" aria-hidden="true">
+  <div class="bs-intro-sky"></div>
+  <div class="bs-lightning one"></div>
+  <div class="bs-lightning two"></div>
+  <div class="bs-flash"></div>
+  <img src="../assets/blue-sonic-moving-emblem.png"
+       class="bs-intro-logo"
+       alt="">
+  <div class="bs-electric-sweep"></div>
+</div>
 <header class="topbar">
   <div class="container nav moving-topbar">
     <div class="moving-brand-block">
-      <a class="brand moving-brand" href="/moving/" aria-label="Blue Sonic Moving Services home">
-        <img src="../assets/blue-sonic-moving-services-logo.png" alt="Blue Sonic Moving Services" class="moving-brand-logo">
+      <a class="brand moving-brand" href="/moving/" aria-label="Blue Sonic Moving home">
+        <img src="../assets/blue-sonic-moving-emblem.png"
+             alt="Blue Sonic — Moving a Brighter Tomorrow"
+             class="moving-brand-logo">
       </a>
-      <div class="moving-brand-tagline">
-        <img src="../assets/blue-sonic-moving-brighter-tomorrow.png"
-             alt="Moving a Brighter Tomorrow"
-             class="moving-brand-tagline-image">
-      </div>
     </div>
 
     <nav class="navlinks">
@@ -212,6 +219,26 @@
 </footer>
 
 <a class="mobile-call" href="tel:+18446776642">Call Blue Sonic • 1-844-MR-SONIC</a>
-<script src="../assets/moving.js"></script>
+<script src="../assets/moving.js?v=61"></script>
+
+<script>
+(function(){
+  const i=document.getElementById('blue-sonic-intro');
+  if(!i)return;
+  document.documentElement.classList.add('bs-intro-active');
+
+  const f=()=>{
+    i.classList.add('bs-intro-exit');
+    setTimeout(()=>{
+      i.remove();
+      document.documentElement.classList.remove('bs-intro-active');
+    },650);
+  };
+
+  setTimeout(f,2550);
+  i.addEventListener('click',f,{once:true});
+})();
+</script>
+
 </body>
 </html>
