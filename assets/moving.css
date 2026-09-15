@@ -782,12 +782,45 @@ html.bs-intro-active body{
 
 
 /* =========================================================
-   MOBILE HEADER SPACING — LOGO LEFT / PHONE RIGHT
+   V62 MOBILE HEADER POSITION FIX
+   Explicitly pushes logo left and phone right.
    ========================================================= */
 @media(max-width:560px){
-  .moving-topbar{
-    width:96vw;
-    margin-left:auto;
-    margin-right:auto;
+  .container.moving-topbar{
+    width:calc(100vw - 18px) !important;
+    max-width:none !important;
+    margin-left:9px !important;
+    margin-right:9px !important;
+    padding-left:0 !important;
+    padding-right:0 !important;
+    grid-template-columns:minmax(0,1fr) 116px !important;
+    column-gap:8px !important;
+  }
+
+  .moving-brand-block{
+    justify-self:start !important;
+    transform:translateX(-6px);
+  }
+
+  .moving-brand{
+    justify-content:flex-start !important;
+  }
+
+  .moving-brand-logo{
+    width:min(270px,69vw) !important;
+  }
+
+  .moving-call-image-link{
+    justify-self:end !important;
+    transform:translateX(6px);
+  }
+
+  .moving-call-image-link:hover{
+    transform:translateX(6px) translateY(-1px);
+  }
+
+  .moving-call-image{
+    width:116px !important;
+    max-width:none !important;
   }
 }
