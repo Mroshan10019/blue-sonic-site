@@ -40,6 +40,17 @@ img{max-width:100%;display:block}
   box-shadow:0 10px 30px rgba(31,122,255,.32);
   font-size:1.1rem
 }
+.moving-brand{
+  background:#fff;
+  padding:5px 10px;
+  border-radius:12px;
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+}
+.moving-brand-logo{
+  width:245px;
+  max-height:58px;
+  object-fit:contain;
+}
 .navlinks{display:flex;gap:20px;align-items:center;color:#d8e7f7;font-size:.95rem}
 .navlinks a:hover{color:white}
 .phone-pill{
@@ -49,8 +60,8 @@ img{max-width:100%;display:block}
 .hero{
   min-height:78vh;display:grid;align-items:center;position:relative;overflow:hidden;
   background:
-    linear-gradient(90deg,rgba(3,10,19,.95) 0%,rgba(3,10,19,.73) 45%,rgba(3,10,19,.25) 100%),
-    url('https://images.unsplash.com/photo-1783473007464-1dbf2ff30dec?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=72&w=2200') center/cover no-repeat;
+    linear-gradient(90deg,rgba(3,10,19,.96) 0%,rgba(3,10,19,.76) 43%,rgba(3,10,19,.20) 100%),
+    url('../assets/blue-sonic-movers-at-house-245.png') center/cover no-repeat;
 }
 .hero:after{
   content:"";position:absolute;inset:auto 0 0;height:160px;
@@ -86,15 +97,14 @@ h1{font-size:clamp(2.5rem,6vw,5.25rem);line-height:.96;margin:20px 0 18px;letter
   box-shadow:var(--shadow)
 }
 .card .photo{
-  height:210px;background-size:cover;background-position:center
+  width:100%;
+  height:235px;
+  object-fit:cover;
+  object-position:center;
 }
 .card-body{padding:22px}
 .card h3{margin:0 0 8px;font-size:1.25rem}
 .card p{margin:0;color:var(--muted)}
-.photo-a{background-image:url('https://images.unsplash.com/photo-1715645948484-da40dd56bc93?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=70&w=1200')}
-.photo-b{background-image:linear-gradient(135deg,rgba(31,122,255,.35),rgba(3,10,19,.3)),url('https://images.unsplash.com/photo-1783473007464-1dbf2ff30dec?auto=format&fit=crop&fm=jpg&ixlib=rb-4.1.0&q=70&w=1200')}
-.photo-c{background-image:linear-gradient(135deg,#173b66,#0b213d)}
-.photo-c:after{content:"Furniture • Storage • Delivery";display:grid;place-items:center;height:100%;font-weight:900;font-size:1.15rem;color:#dcebff}
 .quote-wrap{
   display:grid;grid-template-columns:.92fr 1.08fr;gap:26px;align-items:start;
   background:linear-gradient(135deg,#0d2038,#081523);
@@ -142,6 +152,7 @@ footer{padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.08);color:#90a
   box-shadow:0 14px 35px rgba(0,0,0,.35)
 }
 @media(max-width:860px){
+  .moving-brand-logo{width:185px;max-height:48px}
   .navlinks{display:none}.quote-wrap{grid-template-columns:1fr}.grid-3,.steps{grid-template-columns:1fr}
   .hero{min-height:72vh;background-position:62% center}.hero-content{padding-top:72px}
   .sophie{flex-direction:column;align-items:flex-start}.mobile-call{display:block}
@@ -151,3 +162,6 @@ footer{padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.08);color:#90a
   .form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}
   .section{padding:58px 0}.quote-wrap{padding:12px}.quote-panel{padding:12px}
 }
+
+.footer-secondary{font-size:.84rem;color:#7f95aa}
+.footer-secondary a{color:#a9c9ec}
