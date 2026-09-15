@@ -361,54 +361,421 @@ footer{padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.08);color:#90a
 
 
 /* =========================================================
-   BLUE SONIC — BRANDED "MOVING A BRIGHTER TOMORROW" SLOGAN
+   BLUE SONIC MOVING — UNIFIED EMBLEM HEADER
    ========================================================= */
 
-.moving-brand-tagline{
+.moving-topbar{
+  min-height:96px;
+  padding:10px 0;
+}
+
+.moving-brand-block{
   display:flex;
   align-items:center;
-  padding-left:15px;
-  border-left:1px solid rgba(130,190,255,.28);
-  line-height:1;
+  min-width:0;
+  flex:1 1 auto;
 }
 
-.moving-brand-tagline-image{
-  display:block;
-  width:250px;
-  max-width:25vw;
+.moving-brand{
+  background:transparent;
+  padding:0;
+  border-radius:0;
+  box-shadow:none;
+  display:flex;
+  align-items:center;
+}
+
+.moving-brand-logo{
+  width:330px;
+  max-width:38vw;
+  max-height:82px;
   height:auto;
   object-fit:contain;
-  filter:drop-shadow(0 7px 15px rgba(0,70,190,.22));
+  filter:drop-shadow(0 8px 22px rgba(0,0,0,.30));
 }
 
-/* Tablet */
+.moving-brand-tagline{
+  display:none !important;
+}
+
+.moving-call-image-link{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+  transition:transform .18s ease, filter .18s ease;
+}
+
+.moving-call-image-link:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.06);
+}
+
+.moving-call-image{
+  width:220px;
+  max-width:24vw;
+  height:auto;
+  display:block;
+  filter:drop-shadow(0 10px 24px rgba(0,92,255,.22));
+}
+
+.phone-pill{
+  display:none;
+}
+
+/* Keep the branded hero image. */
+.hero{
+  min-height:78vh;
+  display:grid;
+  align-items:center;
+  position:relative;
+  overflow:hidden;
+  background:
+    linear-gradient(90deg,
+      rgba(3,10,19,.96) 0%,
+      rgba(3,10,19,.84) 31%,
+      rgba(3,10,19,.48) 54%,
+      rgba(3,10,19,.10) 100%),
+    url('../assets/blue-sonic-moving-hero-branded.png') 58% center / cover no-repeat;
+}
+
+.hero-content{
+  max-width:720px;
+}
+
+/* =========================================================
+   BLUE SONIC LIGHTNING INTRO
+   Same structure/timing as the construction-site intro.
+   ========================================================= */
+
+html.bs-intro-active,
+html.bs-intro-active body{
+  overflow:hidden;
+}
+
+.bs-intro{
+  position:fixed;
+  inset:0;
+  z-index:999999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 45%, rgba(19,67,130,.30), transparent 35%),
+    linear-gradient(180deg,#020713 0%,#06101e 47%,#020710 100%);
+  opacity:1;
+  visibility:visible;
+  transition:opacity .65s ease, visibility .65s ease;
+}
+
+.bs-intro-exit{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+
+.bs-intro-sky{
+  position:absolute;
+  inset:-8%;
+  z-index:0;
+  background:
+    radial-gradient(ellipse at 50% 18%,rgba(100,166,255,.16),transparent 38%),
+    radial-gradient(ellipse at 15% 65%,rgba(16,72,142,.15),transparent 34%),
+    radial-gradient(ellipse at 82% 57%,rgba(15,74,155,.16),transparent 32%);
+  animation:bsSkyPulse 2.5s ease-in-out forwards;
+}
+
+.bs-intro-logo{
+  position:relative;
+  z-index:5;
+  width:min(720px,82vw);
+  max-height:360px;
+  object-fit:contain;
+  opacity:0;
+  transform:scale(.78);
+  filter:
+    drop-shadow(0 0 10px rgba(255,255,255,.18))
+    drop-shadow(0 0 28px rgba(40,137,255,.48))
+    drop-shadow(0 24px 48px rgba(0,0,0,.60));
+  animation:bsLogoReveal 2.35s cubic-bezier(.18,.76,.23,1) forwards;
+}
+
+.bs-lightning{
+  position:absolute;
+  z-index:3;
+  width:12px;
+  height:64vh;
+  top:-8vh;
+  opacity:0;
+  transform-origin:top center;
+  background:#f7fcff;
+  clip-path:polygon(
+    40% 0, 100% 0, 64% 28%,
+    100% 28%, 42% 58%,
+    72% 58%, 0 100%,
+    28% 66%, 0 66%
+  );
+  box-shadow:
+    0 0 8px #fff,
+    0 0 22px #7fc6ff,
+    0 0 46px #1681ff;
+  filter:drop-shadow(0 0 15px #a8d8ff)
+         drop-shadow(0 0 30px #1681ff);
+}
+
+.bs-lightning.one{
+  left:27%;
+  transform:rotate(12deg) scaleX(1.25);
+  animation:bsBoltOne 1.15s ease-out .10s forwards;
+}
+
+.bs-lightning.two{
+  right:25%;
+  height:55vh;
+  transform:rotate(-13deg) scale(.80);
+  animation:bsBoltTwo 1.20s ease-out .48s forwards;
+}
+
+.bs-flash{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  opacity:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 48% 42%,
+      rgba(255,255,255,.98) 0%,
+      rgba(183,222,255,.62) 12%,
+      rgba(80,155,255,.25) 28%,
+      rgba(255,255,255,0) 55%);
+  animation:bsFlash 1.75s ease-out .05s forwards;
+}
+
+.bs-electric-sweep{
+  position:absolute;
+  z-index:6;
+  left:-35%;
+  top:54%;
+  width:34%;
+  height:4px;
+  opacity:0;
+  transform:rotate(-4deg);
+  background:linear-gradient(
+    90deg,
+    transparent,
+    rgba(85,175,255,.15),
+    rgba(180,225,255,.90),
+    #fff,
+    rgba(94,180,255,.90),
+    transparent
+  );
+  box-shadow:
+    0 0 8px rgba(255,255,255,.9),
+    0 0 20px rgba(55,150,255,.85),
+    0 0 42px rgba(55,150,255,.52);
+  animation:bsElectricSweep 1.22s ease-out .72s forwards;
+}
+
+@keyframes bsSkyPulse{
+  0%{transform:scale(1);filter:brightness(.70)}
+  20%{filter:brightness(1.45)}
+  32%{filter:brightness(.80)}
+  45%{filter:brightness(1.25)}
+  100%{transform:scale(1.04);filter:brightness(.85)}
+}
+
+@keyframes bsBoltOne{
+  0%{opacity:0}
+  7%{opacity:1}
+  12%{opacity:.08}
+  18%{opacity:1}
+  25%{opacity:.18}
+  33%{opacity:.95}
+  46%,100%{opacity:0}
+}
+
+@keyframes bsBoltTwo{
+  0%{opacity:0}
+  12%{opacity:.95}
+  18%{opacity:.08}
+  26%{opacity:.90}
+  37%{opacity:.15}
+  48%{opacity:.86}
+  61%,100%{opacity:0}
+}
+
+@keyframes bsFlash{
+  0%{opacity:0}
+  7%{opacity:.08}
+  13%{opacity:.96}
+  18%{opacity:.10}
+  26%{opacity:.68}
+  34%{opacity:.05}
+  45%{opacity:.45}
+  60%,100%{opacity:0}
+}
+
+@keyframes bsLogoReveal{
+  0%,25%{
+    opacity:0;
+    transform:scale(.78);
+  }
+  39%{
+    opacity:.35;
+    transform:scale(.88);
+  }
+  50%{
+    opacity:1;
+    transform:scale(1.035);
+  }
+  64%{
+    opacity:1;
+    transform:scale(.985);
+  }
+  100%{
+    opacity:1;
+    transform:scale(1);
+  }
+}
+
+@keyframes bsElectricSweep{
+  0%{
+    left:-35%;
+    opacity:0;
+  }
+  14%{
+    opacity:1;
+  }
+  66%{
+    opacity:1;
+  }
+  100%{
+    left:108%;
+    opacity:0;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE HEADER + INTRO
+   ========================================================= */
+
 @media(max-width:1000px){
-  .moving-brand-tagline-image{
-    width:205px;
-    max-width:23vw;
+  .moving-brand-logo{
+    width:285px;
+    max-width:34vw;
+  }
+
+  .moving-call-image{
+    width:185px;
+    max-width:22vw;
   }
 }
 
-/* Mobile: put slogan on its own line beneath logo + phone */
 @media(max-width:860px){
-  .moving-brand-tagline{
-    grid-area:tag;
-    width:100%;
-    border-left:0;
-    border-top:1px solid rgba(130,190,255,.22);
-    padding:8px 0 0;
-    justify-content:flex-start;
+  .moving-topbar{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    grid-template-areas:"brand call";
+    gap:12px;
+    padding:10px 0;
   }
 
-  .moving-brand-tagline-image{
-    width:min(360px,78vw);
+  .moving-brand-block{
+    grid-area:brand;
+  }
+
+  .moving-brand-logo{
+    width:min(320px,67vw);
+    max-width:none;
+    max-height:76px;
+  }
+
+  .moving-call-image-link{
+    grid-area:call;
+    justify-self:end;
+  }
+
+  .moving-call-image{
+    width:min(178px,27vw);
     max-width:none;
   }
+
+  .hero{
+    min-height:76vh;
+    background-position:60% center;
+  }
+
+  .hero-content{
+    padding-top:70px;
+  }
+
+  .bs-intro-logo{
+    width:min(760px,92vw);
+    max-height:330px;
+  }
+
+  .bs-lightning.one{
+    left:15%;
+  }
+
+  .bs-lightning.two{
+    right:13%;
+  }
 }
 
-/* Narrow phones */
 @media(max-width:560px){
-  .moving-brand-tagline-image{
-    width:min(330px,84vw);
+  .moving-topbar{
+    grid-template-columns:minmax(0,1fr) 116px;
+  }
+
+  .moving-brand-logo{
+    width:min(270px,68vw);
+    max-height:70px;
+  }
+
+  .moving-call-image{
+    width:116px;
+  }
+
+  .hero{
+    min-height:79vh;
+    background:
+      linear-gradient(90deg,
+        rgba(3,10,19,.96) 0%,
+        rgba(3,10,19,.83) 46%,
+        rgba(3,10,19,.26) 100%),
+      url('../assets/blue-sonic-moving-hero-branded.png') 63% center / cover no-repeat;
+  }
+
+  .bs-intro-logo{
+    width:92vw;
+    max-height:260px;
+  }
+
+  .bs-lightning{
+    height:50vh;
+  }
+
+  .bs-lightning.one{
+    left:10%;
+  }
+
+  .bs-lightning.two{
+    right:8%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .bs-lightning,
+  .bs-flash,
+  .bs-electric-sweep{
+    display:none;
+  }
+
+  .bs-intro-logo{
+    animation:none;
+    opacity:1;
+    transform:none;
   }
 }
