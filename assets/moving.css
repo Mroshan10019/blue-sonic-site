@@ -358,3 +358,57 @@ footer{padding:34px 0 48px;border-top:1px solid rgba(255,255,255,.08);color:#90a
       url('../assets/blue-sonic-moving-hero-branded.png') 63% center / cover no-repeat;
   }
 }
+
+
+/* =========================================================
+   BLUE SONIC — BRANDED "MOVING A BRIGHTER TOMORROW" SLOGAN
+   ========================================================= */
+
+.moving-brand-tagline{
+  display:flex;
+  align-items:center;
+  padding-left:15px;
+  border-left:1px solid rgba(130,190,255,.28);
+  line-height:1;
+}
+
+.moving-brand-tagline-image{
+  display:block;
+  width:250px;
+  max-width:25vw;
+  height:auto;
+  object-fit:contain;
+  filter:drop-shadow(0 7px 15px rgba(0,70,190,.22));
+}
+
+/* Tablet */
+@media(max-width:1000px){
+  .moving-brand-tagline-image{
+    width:205px;
+    max-width:23vw;
+  }
+}
+
+/* Mobile: put slogan on its own line beneath logo + phone */
+@media(max-width:860px){
+  .moving-brand-tagline{
+    grid-area:tag;
+    width:100%;
+    border-left:0;
+    border-top:1px solid rgba(130,190,255,.22);
+    padding:8px 0 0;
+    justify-content:flex-start;
+  }
+
+  .moving-brand-tagline-image{
+    width:min(360px,78vw);
+    max-width:none;
+  }
+}
+
+/* Narrow phones */
+@media(max-width:560px){
+  .moving-brand-tagline-image{
+    width:min(330px,84vw);
+  }
+}
