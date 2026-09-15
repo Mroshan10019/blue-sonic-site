@@ -779,3 +779,15 @@ html.bs-intro-active body{
     transform:none;
   }
 }
+
+
+/* =========================================================
+   MOBILE HEADER SPACING — LOGO LEFT / PHONE RIGHT
+   ========================================================= */
+@media(max-width:560px){
+  .moving-topbar{
+    width:96vw;
+    margin-left:auto;
+    margin-right:auto;
+  }
+}
