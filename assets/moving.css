@@ -882,4 +882,13 @@ html.bs-intro-active body{
     max-width:none !important;
     margin:0 !important;
   }
+
+
+}
+/* Match Moving navigation font to main Blue Sonic site */
+.moving-nav,
+.moving-nav a,
+header nav,
+header nav a {
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
