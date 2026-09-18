@@ -331,10 +331,17 @@
     });
 
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 45000);
+
       const response = await fetch(SOPHIE_ENDPOINT, {
         method: "POST",
+        mode: "cors",
+        cache: "no-store",
+        credentials: "omit",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "text/plain;charset=UTF-8",
+          "Accept": "application/json"
         },
         body: JSON.stringify({
           session_id: sessionId,
@@ -342,16 +349,26 @@
           history: previousHistory,
           page_url: window.location.href,
           page_title: document.title
-        })
+        }),
+        signal: controller.signal
       });
 
-      const data = await response.json().catch(() => ({}));
+      clearTimeout(timeoutId);
+
+      const raw = await response.text();
+      let data = {};
+
+      try {
+        data = raw ? JSON.parse(raw) : {};
+      } catch (_) {
+        data = {};
+      }
 
       typing.remove();
 
       if (!response.ok) {
         throw new Error(
-          data.error || "Sophie could not respond right now."
+          data.error || `Sophie chat service error (${response.status})`
         );
       }
 
@@ -373,9 +390,14 @@
         typing.remove();
       }
 
+      const timedOut =
+        error && typeof error === "object" && error.name === "AbortError";
+
       addMessage(
         "assistant",
-        `I'm having trouble connecting right now. Please call ${PHONE_DISPLAY} and Blue Sonic can assist you.`
+        timedOut
+          ? `The chat request took too long. Please try again, or call ${PHONE_DISPLAY}.`
+          : `I'm having trouble connecting right now. Please call ${PHONE_DISPLAY} and Blue Sonic can assist you.`
       );
     } finally {
       busy = false;
