@@ -54,11 +54,11 @@ img{max-width:100%;display:block}
 }
 .navlinks{
   display:flex;
-  gap:24px;
+  gap:26px;
   align-items:center;
   color:#d8e1ec;
   font-family:"Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  font-size:12px;
+  font-size:14px;
   font-weight:700;
 }
 .navlinks a:hover{color:white}
