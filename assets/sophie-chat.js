@@ -2,27 +2,34 @@
   const SOPHIE_ENDPOINT =
     "https://tgnanphlebiyuaxrsjec.supabase.co/functions/v1/sophie-chat";
 
+  const SUBMIT_ENDPOINT =
+    "https://tgnanphlebiyuaxrsjec.supabase.co/functions/v1/submit-sophie-lead";
+
   const PHONE_DISPLAY = "1-844-MR-SONIC";
   const PHONE_LINK = "tel:+18446776642";
 
   let history = [];
   let busy = false;
+  let submitting = false;
+  let submitted = false;
+
+  const makeSessionId = () => {
+    if (window.crypto && crypto.randomUUID) {
+      return crypto.randomUUID();
+    }
+
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+      const r = (Math.random() * 16) | 0;
+      const v = c === "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  };
 
   const getSessionId = () => {
     let id = localStorage.getItem("blueSonicSophieSession");
 
     if (!id) {
-      if (window.crypto && crypto.randomUUID) {
-        id = crypto.randomUUID();
-      } else {
-        id =
-          "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
-            const r = (Math.random() * 16) | 0;
-            const v = c === "x" ? r : (r & 0x3) | 0x8;
-            return v.toString(16);
-          });
-      }
-
+      id = makeSessionId();
       localStorage.setItem("blueSonicSophieSession", id);
     }
 
@@ -161,6 +168,47 @@
       font-style: italic;
     }
 
+    .bs-sophie-submit-wrap {
+      display: none;
+      padding: 10px 12px 0;
+      background: #0c111b;
+    }
+
+    .bs-sophie-submit-wrap.bs-show {
+      display: block;
+    }
+
+    #bs-sophie-submit {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: linear-gradient(135deg, #0a8cff, #0061d8);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(0,110,220,.24);
+    }
+
+    #bs-sophie-submit:hover {
+      transform: translateY(-1px);
+    }
+
+    #bs-sophie-submit:disabled {
+      opacity: .62;
+      cursor: default;
+      transform: none;
+    }
+
+    .bs-sophie-submit-note {
+      margin-top: 7px;
+      color: #9eacc0;
+      font-size: 11px;
+      line-height: 1.35;
+      text-align: center;
+    }
+
     .bs-sophie-call {
       padding: 8px 14px 0;
       background: #0c111b;
@@ -260,6 +308,16 @@
 
     <div id="bs-sophie-messages"></div>
 
+    <div class="bs-sophie-submit-wrap" id="bs-sophie-submit-wrap">
+      <button id="bs-sophie-submit" type="button">
+        Send My Request to Blue Sonic
+      </button>
+
+      <div class="bs-sophie-submit-note">
+        Sends your chat details to the Blue Sonic team for review.
+      </div>
+    </div>
+
     <div class="bs-sophie-call">
       Prefer to call?
       <a href="${PHONE_LINK}">
@@ -288,43 +346,56 @@
   document.body.appendChild(launcher);
   document.body.appendChild(widget);
 
-  const closeButton =
-    document.getElementById("bs-sophie-close");
+  const closeButton = document.getElementById("bs-sophie-close");
+  const form = document.getElementById("bs-sophie-form");
+  const input = document.getElementById("bs-sophie-input");
+  const sendButton = document.getElementById("bs-sophie-send");
+  const messages = document.getElementById("bs-sophie-messages");
+  const submitWrap = document.getElementById("bs-sophie-submit-wrap");
+  const submitButton = document.getElementById("bs-sophie-submit");
 
-  const form =
-    document.getElementById("bs-sophie-form");
-
-  const input =
-    document.getElementById("bs-sophie-input");
-
-  const sendButton =
-    document.getElementById("bs-sophie-send");
-
-  const messages =
-    document.getElementById("bs-sophie-messages");
-
-  const addMessage = (
-    role,
-    text,
-    extraClass = ""
-  ) => {
+  const addMessage = (role, text, extraClass = "") => {
     const bubble = document.createElement("div");
 
     bubble.className =
-      `bs-msg ${
-        role === "user"
-          ? "bs-user"
-          : "bs-assistant"
-      } ${extraClass}`;
+      `bs-msg ${role === "user" ? "bs-user" : "bs-assistant"} ${extraClass}`;
 
     bubble.textContent = text;
 
     messages.appendChild(bubble);
-
-    messages.scrollTop =
-      messages.scrollHeight;
+    messages.scrollTop = messages.scrollHeight;
 
     return bubble;
+  };
+
+  const userHasProvidedContactInfo = () => {
+    const userMessages = history
+      .filter((item) => item.role === "user")
+      .map((item) => item.content || "");
+
+    if (userMessages.length < 2) {
+      return false;
+    }
+
+    const text = userMessages.join("\n");
+
+    const hasEmail =
+      /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(text);
+
+    const hasPhone =
+      /(?:\+?1[\s.-]?)?(?:\(?\d{3}\)?[\s.-]?)\d{3}[\s.-]?\d{4}/.test(text);
+
+    return hasEmail || hasPhone;
+  };
+
+  const maybeShowSubmitButton = () => {
+    if (submitted || submitting) {
+      return;
+    }
+
+    if (userHasProvidedContactInfo()) {
+      submitWrap.classList.add("bs-show");
+    }
   };
 
   addMessage(
@@ -332,194 +403,202 @@
     "Hi! I’m Sophie, Blue Sonic’s AI assistant. I can help with moving, demolition, debris removal, construction support, project inquiries, estimates, and general questions. How can I help you today?"
   );
 
-  launcher.addEventListener(
-    "click",
-    () => {
-      widget.classList.toggle("bs-open");
+  launcher.addEventListener("click", () => {
+    widget.classList.toggle("bs-open");
 
-      if (
-        widget.classList.contains("bs-open")
-      ) {
-        setTimeout(
-          () => input.focus(),
-          100
-        );
-      }
+    if (widget.classList.contains("bs-open")) {
+      setTimeout(() => input.focus(), 100);
     }
-  );
+  });
 
-  closeButton.addEventListener(
-    "click",
-    () => {
-      widget.classList.remove("bs-open");
+  closeButton.addEventListener("click", () => {
+    widget.classList.remove("bs-open");
+  });
+
+  submitButton.addEventListener("click", async () => {
+    if (submitting || submitted) {
+      return;
     }
-  );
 
-  form.addEventListener(
-    "submit",
-    async (event) => {
-      event.preventDefault();
+    submitting = true;
+    submitButton.disabled = true;
+    submitButton.textContent = "Sending...";
 
-      const message =
-        input.value.trim();
-
-      if (!message || busy) {
-        return;
-      }
-
-      busy = true;
-
-      input.value = "";
-
-      sendButton.disabled = true;
-
-      addMessage(
-        "user",
-        message
-      );
-
-      const typing =
-        addMessage(
-          "assistant",
-          "Sophie is typing...",
-          "bs-typing"
-        );
-
-      const previousHistory =
-        history.slice(-10);
-
-      history.push({
-        role: "user",
-        content: message
+    try {
+      const response = await fetch(SUBMIT_ENDPOINT, {
+        method: "POST",
+        mode: "cors",
+        cache: "no-store",
+        credentials: "omit",
+        headers: {
+          "Content-Type": "text/plain;charset=UTF-8",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          session_id: sessionId,
+          page_url: window.location.href
+        })
       });
 
+      const raw = await response.text();
+      let data = {};
+
       try {
-        const controller =
-          new AbortController();
-
-        const timeoutId =
-          setTimeout(
-            () => controller.abort(),
-            45000
-          );
-
-        const response =
-          await fetch(
-            SOPHIE_ENDPOINT,
-            {
-              method: "POST",
-
-              mode: "cors",
-
-              cache: "no-store",
-
-              credentials: "omit",
-
-              headers: {
-                "Content-Type":
-                  "text/plain;charset=UTF-8",
-
-                "Accept":
-                  "application/json"
-              },
-
-              body:
-                JSON.stringify({
-                  session_id:
-                    sessionId,
-
-                  message:
-                    message,
-
-                  history:
-                    previousHistory,
-
-                  page_url:
-                    window.location.href,
-
-                  page_title:
-                    document.title
-                }),
-
-              signal:
-                controller.signal
-            }
-          );
-
-        clearTimeout(timeoutId);
-
-        const raw =
-          await response.text();
-
-        let data = {};
-
-        try {
-          data =
-            raw
-              ? JSON.parse(raw)
-              : {};
-        } catch (_) {
-          data = {};
-        }
-
-        typing.remove();
-
-        if (!response.ok) {
-          throw new Error(
-            data.error ||
-            `Sophie chat service error (${response.status})`
-          );
-        }
-
-        const reply =
-          data.reply ||
-          data.message ||
-          "Thanks. I received your message. How else can I help?";
-
-        addMessage(
-          "assistant",
-          reply
-        );
-
-        history.push({
-          role: "assistant",
-          content: reply
-        });
-
-      } catch (error) {
-
-        console.error(
-          "Sophie chat error:",
-          error
-        );
-
-        if (
-          typing.isConnected
-        ) {
-          typing.remove();
-        }
-
-        const timedOut =
-          error &&
-          typeof error === "object" &&
-          error.name === "AbortError";
-
-        addMessage(
-          "assistant",
-
-          timedOut
-            ? `The chat request took too long. Please try again, or call ${PHONE_DISPLAY}.`
-            : `I'm having trouble connecting right now. Please call ${PHONE_DISPLAY} and Blue Sonic can assist you.`
-        );
-
-      } finally {
-
-        busy = false;
-
-        sendButton.disabled = false;
-
-        input.focus();
+        data = raw ? JSON.parse(raw) : {};
+      } catch (_) {
+        data = {};
       }
+
+      if (!response.ok || data.ok === false) {
+        throw new Error(
+          data.error || `Submission failed (${response.status})`
+        );
+      }
+
+      submitted = true;
+
+      localStorage.removeItem("blueSonicSophieSession");
+
+      submitButton.textContent = "Request Sent ✓";
+      submitButton.disabled = true;
+
+      addMessage(
+        "assistant",
+        data.message ||
+          "Your request was sent successfully to Blue Sonic. The team can now review the full chat and follow up with you."
+      );
+    } catch (error) {
+      console.error("Sophie lead submission error:", error);
+
+      submitButton.disabled = false;
+      submitButton.textContent = "Send My Request to Blue Sonic";
+
+      addMessage(
+        "assistant",
+        `I couldn't send your request just now. Please try again, or call ${PHONE_DISPLAY}.`
+      );
+    } finally {
+      submitting = false;
+      messages.scrollTop = messages.scrollHeight;
     }
-  );
+  });
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const message = input.value.trim();
+
+    if (!message || busy) {
+      return;
+    }
+
+    busy = true;
+    input.value = "";
+    sendButton.disabled = true;
+
+    addMessage("user", message);
+
+    const typing = addMessage(
+      "assistant",
+      "Sophie is typing...",
+      "bs-typing"
+    );
+
+    const previousHistory = history.slice(-10);
+
+    history.push({
+      role: "user",
+      content: message
+    });
+
+    try {
+      const controller = new AbortController();
+
+      const timeoutId = setTimeout(
+        () => controller.abort(),
+        45000
+      );
+
+      const response = await fetch(SOPHIE_ENDPOINT, {
+        method: "POST",
+        mode: "cors",
+        cache: "no-store",
+        credentials: "omit",
+        headers: {
+          "Content-Type": "text/plain;charset=UTF-8",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({
+          session_id: sessionId,
+          message: message,
+          history: previousHistory,
+          page_url: window.location.href,
+          page_title: document.title
+        }),
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      const raw = await response.text();
+      let data = {};
+
+      try {
+        data = raw ? JSON.parse(raw) : {};
+      } catch (_) {
+        data = {};
+      }
+
+      typing.remove();
+
+      if (!response.ok) {
+        throw new Error(
+          data.error ||
+            `Sophie chat service error (${response.status})`
+        );
+      }
+
+      const reply =
+        data.reply ||
+        data.message ||
+        "Thanks. I received your message. How else can I help?";
+
+      addMessage(
+        "assistant",
+        reply
+      );
+
+      history.push({
+        role: "assistant",
+        content: reply
+      });
+
+      maybeShowSubmitButton();
+    } catch (error) {
+      console.error(
+        "Sophie chat error:",
+        error
+      );
+
+      if (typing.isConnected) {
+        typing.remove();
+      }
+
+      const timedOut =
+        error &&
+        typeof error === "object" &&
+        error.name === "AbortError";
+
+      addMessage(
+        "assistant",
+        timedOut
+          ? `The chat request took too long. Please try again, or call ${PHONE_DISPLAY}.`
+          : `I'm having trouble connecting right now. Please call ${PHONE_DISPLAY} and Blue Sonic can assist you.`
+      );
+    } finally {
+      busy = false;
+      sendButton.disabled = false;
+      input.focus();
+    }
+  });
 })();
