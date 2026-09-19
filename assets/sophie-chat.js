@@ -1,6 +1,6 @@
 (() => {
   const SOPHIE_ENDPOINT =
-    "https://tgnanphlebyuaxrsjec.supabase.co/functions/v1/sophie-chat";
+    "https://tgnanphlebiyuaxrsjec.supabase.co/functions/v1/sophie-chat";
 
   const PHONE_DISPLAY = "1-844-MR-SONIC";
   const PHONE_LINK = "tel:+18446776642";
@@ -32,6 +32,7 @@
   const sessionId = getSessionId();
 
   const style = document.createElement("style");
+
   style.textContent = `
     #bs-sophie-launcher {
       position: fixed;
@@ -242,18 +243,28 @@
   widget.innerHTML = `
     <div class="bs-sophie-header">
       <div class="bs-sophie-avatar">S</div>
+
       <div class="bs-sophie-title">
         <strong>Sophie</strong>
         <span>Blue Sonic AI Assistant • Online</span>
       </div>
-      <button id="bs-sophie-close" type="button" aria-label="Close chat">&times;</button>
+
+      <button
+        id="bs-sophie-close"
+        type="button"
+        aria-label="Close chat"
+      >
+        &times;
+      </button>
     </div>
 
     <div id="bs-sophie-messages"></div>
 
     <div class="bs-sophie-call">
       Prefer to call?
-      <a href="${PHONE_LINK}">${PHONE_DISPLAY}</a>
+      <a href="${PHONE_LINK}">
+        ${PHONE_DISPLAY}
+      </a>
     </div>
 
     <form class="bs-sophie-form" id="bs-sophie-form">
@@ -264,26 +275,55 @@
         maxlength="1200"
         placeholder="Ask Sophie anything..."
       >
-      <button id="bs-sophie-send" type="submit">Send</button>
+
+      <button
+        id="bs-sophie-send"
+        type="submit"
+      >
+        Send
+      </button>
     </form>
   `;
 
   document.body.appendChild(launcher);
   document.body.appendChild(widget);
 
-  const closeButton = document.getElementById("bs-sophie-close");
-  const form = document.getElementById("bs-sophie-form");
-  const input = document.getElementById("bs-sophie-input");
-  const sendButton = document.getElementById("bs-sophie-send");
-  const messages = document.getElementById("bs-sophie-messages");
+  const closeButton =
+    document.getElementById("bs-sophie-close");
 
-  const addMessage = (role, text, extraClass = "") => {
+  const form =
+    document.getElementById("bs-sophie-form");
+
+  const input =
+    document.getElementById("bs-sophie-input");
+
+  const sendButton =
+    document.getElementById("bs-sophie-send");
+
+  const messages =
+    document.getElementById("bs-sophie-messages");
+
+  const addMessage = (
+    role,
+    text,
+    extraClass = ""
+  ) => {
     const bubble = document.createElement("div");
+
     bubble.className =
-      `bs-msg ${role === "user" ? "bs-user" : "bs-assistant"} ${extraClass}`;
+      `bs-msg ${
+        role === "user"
+          ? "bs-user"
+          : "bs-assistant"
+      } ${extraClass}`;
+
     bubble.textContent = text;
+
     messages.appendChild(bubble);
-    messages.scrollTop = messages.scrollHeight;
+
+    messages.scrollTop =
+      messages.scrollHeight;
+
     return bubble;
   };
 
@@ -292,117 +332,194 @@
     "Hi! I’m Sophie, Blue Sonic’s AI assistant. I can help with moving, demolition, debris removal, construction support, project inquiries, estimates, and general questions. How can I help you today?"
   );
 
-  launcher.addEventListener("click", () => {
-    widget.classList.toggle("bs-open");
+  launcher.addEventListener(
+    "click",
+    () => {
+      widget.classList.toggle("bs-open");
 
-    if (widget.classList.contains("bs-open")) {
-      setTimeout(() => input.focus(), 100);
-    }
-  });
-
-  closeButton.addEventListener("click", () => {
-    widget.classList.remove("bs-open");
-  });
-
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-
-    const message = input.value.trim();
-
-    if (!message || busy) return;
-
-    busy = true;
-    input.value = "";
-    sendButton.disabled = true;
-
-    addMessage("user", message);
-
-    const typing = addMessage(
-      "assistant",
-      "Sophie is typing...",
-      "bs-typing"
-    );
-
-    const previousHistory = history.slice(-10);
-
-    history.push({
-      role: "user",
-      content: message
-    });
-
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 45000);
-
-      const response = await fetch(SOPHIE_ENDPOINT, {
-        method: "POST",
-        mode: "cors",
-        cache: "no-store",
-        credentials: "omit",
-        headers: {
-          "Content-Type": "text/plain;charset=UTF-8",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify({
-          session_id: sessionId,
-          message,
-          history: previousHistory,
-          page_url: window.location.href,
-          page_title: document.title
-        }),
-        signal: controller.signal
-      });
-
-      clearTimeout(timeoutId);
-
-      const raw = await response.text();
-      let data = {};
-
-      try {
-        data = raw ? JSON.parse(raw) : {};
-      } catch (_) {
-        data = {};
-      }
-
-      typing.remove();
-
-      if (!response.ok) {
-        throw new Error(
-          data.error || `Sophie chat service error (${response.status})`
+      if (
+        widget.classList.contains("bs-open")
+      ) {
+        setTimeout(
+          () => input.focus(),
+          100
         );
       }
+    }
+  );
 
-      const reply =
-        data.reply ||
-        data.message ||
-        "Thanks. I received your message. How else can I help?";
+  closeButton.addEventListener(
+    "click",
+    () => {
+      widget.classList.remove("bs-open");
+    }
+  );
 
-      addMessage("assistant", reply);
+  form.addEventListener(
+    "submit",
+    async (event) => {
+      event.preventDefault();
 
-      history.push({
-        role: "assistant",
-        content: reply
-      });
-    } catch (error) {
-      console.error("Sophie chat error:", error);
+      const message =
+        input.value.trim();
 
-      if (typing.isConnected) {
-        typing.remove();
+      if (!message || busy) {
+        return;
       }
 
-      const timedOut =
-        error && typeof error === "object" && error.name === "AbortError";
+      busy = true;
+
+      input.value = "";
+
+      sendButton.disabled = true;
 
       addMessage(
-        "assistant",
-        timedOut
-          ? `The chat request took too long. Please try again, or call ${PHONE_DISPLAY}.`
-          : `I'm having trouble connecting right now. Please call ${PHONE_DISPLAY} and Blue Sonic can assist you.`
+        "user",
+        message
       );
-    } finally {
-      busy = false;
-      sendButton.disabled = false;
-      input.focus();
+
+      const typing =
+        addMessage(
+          "assistant",
+          "Sophie is typing...",
+          "bs-typing"
+        );
+
+      const previousHistory =
+        history.slice(-10);
+
+      history.push({
+        role: "user",
+        content: message
+      });
+
+      try {
+        const controller =
+          new AbortController();
+
+        const timeoutId =
+          setTimeout(
+            () => controller.abort(),
+            45000
+          );
+
+        const response =
+          await fetch(
+            SOPHIE_ENDPOINT,
+            {
+              method: "POST",
+
+              mode: "cors",
+
+              cache: "no-store",
+
+              credentials: "omit",
+
+              headers: {
+                "Content-Type":
+                  "text/plain;charset=UTF-8",
+
+                "Accept":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify({
+                  session_id:
+                    sessionId,
+
+                  message:
+                    message,
+
+                  history:
+                    previousHistory,
+
+                  page_url:
+                    window.location.href,
+
+                  page_title:
+                    document.title
+                }),
+
+              signal:
+                controller.signal
+            }
+          );
+
+        clearTimeout(timeoutId);
+
+        const raw =
+          await response.text();
+
+        let data = {};
+
+        try {
+          data =
+            raw
+              ? JSON.parse(raw)
+              : {};
+        } catch (_) {
+          data = {};
+        }
+
+        typing.remove();
+
+        if (!response.ok) {
+          throw new Error(
+            data.error ||
+            `Sophie chat service error (${response.status})`
+          );
+        }
+
+        const reply =
+          data.reply ||
+          data.message ||
+          "Thanks. I received your message. How else can I help?";
+
+        addMessage(
+          "assistant",
+          reply
+        );
+
+        history.push({
+          role: "assistant",
+          content: reply
+        });
+
+      } catch (error) {
+
+        console.error(
+          "Sophie chat error:",
+          error
+        );
+
+        if (
+          typing.isConnected
+        ) {
+          typing.remove();
+        }
+
+        const timedOut =
+          error &&
+          typeof error === "object" &&
+          error.name === "AbortError";
+
+        addMessage(
+          "assistant",
+
+          timedOut
+            ? `The chat request took too long. Please try again, or call ${PHONE_DISPLAY}.`
+            : `I'm having trouble connecting right now. Please call ${PHONE_DISPLAY} and Blue Sonic can assist you.`
+        );
+
+      } finally {
+
+        busy = false;
+
+        sendButton.disabled = false;
+
+        input.focus();
+      }
     }
-  });
+  );
 })();
